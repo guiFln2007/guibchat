@@ -1,0 +1,8 @@
+.env
+.env.*
+data/
+cloudflared.exe
+*.tgz
+.next/
+node_modules/
+.playwright-mcp/
