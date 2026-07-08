@@ -28,6 +28,20 @@ export default function Automacoes() {
     load();
   }
 
+  async function clone(a: Automation) {
+    await fetch("/api/automations", {
+      method: "POST",
+      body: JSON.stringify({
+        name: `${a.name} (Cópia)`,
+        active: false,
+        trigger: a.trigger,
+        publicReplies: a.publicReplies,
+        steps: a.steps,
+      }),
+    });
+    load();
+  }
+
   const filtered = list.filter((a) =>
     a.name.toLowerCase().includes(search.toLowerCase()),
   );
@@ -114,6 +128,13 @@ export default function Automacoes() {
                 >
                   Fluxo
                 </Link>
+                <button
+                  onClick={() => clone(a)}
+                  className="text-xs px-3 py-1.5 rounded-lg bg-zinc-800 text-zinc-400 hover:bg-zinc-700 font-medium transition"
+                  title="Clonar automação"
+                >
+                  Clonar
+                </button>
                 <button
                   onClick={() => remove(a.id)}
                   className="text-xs px-3 py-1.5 rounded-lg bg-zinc-800 text-zinc-500 hover:bg-red-900/40 hover:text-red-400 transition"
