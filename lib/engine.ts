@@ -123,6 +123,15 @@ export async function handleComment(ctx: Ctx, ev: CommentEvent) {
     (a) => a.active && a.trigger.type === "comment",
   );
 
+  // Automações com postIds específicos têm prioridade sobre as gerais (postIds = null).
+  // Se a mesma keyword existe em uma automação específica pro post E numa geral,
+  // a específica ganha e a geral não dispara.
+  automations.sort((a, b) => {
+    const aSpecific = a.trigger.postIds ? 0 : 1;
+    const bSpecific = b.trigger.postIds ? 0 : 1;
+    return aSpecific - bSpecific;
+  });
+
   for (const a of automations) {
     // filtro de publicação (null = qualquer)
     if (a.trigger.postIds && ev.mediaId && !a.trigger.postIds.includes(ev.mediaId)) continue;
